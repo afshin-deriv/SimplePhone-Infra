@@ -13,8 +13,6 @@ spec:
   selector:
     matchLabels:
       run: simplephone
-  # remove replica if using gitops
-  replicas: 1
   template:
     metadata:
       labels:
@@ -22,7 +20,7 @@ spec:
     spec:
       containers:
       - name: simplephone
-        image: phantasm/simplephone:V20220730_0_08
+        image: k8s.gcr.io/hpa-example
         ports:
         - containerPort: 80
         resources:

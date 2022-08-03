@@ -20,7 +20,7 @@ resource "helm_release" "aws-load-balancer-controller" {
 
   set {
     name  = "replicaCount"
-    value = 1
+    value = 2
   }
 
   set {
@@ -36,7 +36,7 @@ resource "helm_release" "aws-load-balancer-controller" {
   # EKS Fargate specific
   set {
     name  = "region"
-    value = "us-east-1"
+    value = var.aws_region
   }
 
   set {
