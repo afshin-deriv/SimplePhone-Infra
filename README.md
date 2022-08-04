@@ -5,6 +5,10 @@ Terraform for build EKS fargate infrastructure
 Install `awscli ~> 2.7.1`
 ```
 $ export KUBE_CONFIG_PATH=~/.kube/config
+$ export AWS_ACCESS_KEY_ID="xxxxxxx"
+$ export AWS_SECRET_ACCESS_KEY="yyyyyyy"
+$ export DB_PASSWORD="zzzzzzz"
+export TF_VAR_rds_password=111222333
 $ git clone git@github.com:afshinpaydar-binary/SimplePhone-Infra.git
 ```
 
@@ -14,15 +18,15 @@ $ git clone git@github.com:afshinpaydar-binary/SimplePhone-Infra.git
 ```
 $ cd SimplePhone-Infra/s3_terraform_state
 $ terraform init
-$ terraform plan
+$ terraform plan -out .tfplan
 $ terraform apply
 ```
 
 # Setup KMS
 ```
 $ cd SimplePhone-Infra/kms
-$ terraform init
-$ terraform plan
+$ terraform init -reconfigure
+$ terraform plan -out .tfplan
 $ terraform apply
 
 $ echo -n '<Secure-Password-for-DB>' > /tmp/plaintext-password
@@ -32,11 +36,19 @@ $ rm -rf /tmp/plaintext-password
 # Update `aws_kms_secrets_payload` variablein the `variables.tf` file with output of last command
 ```
 
+## Setup Mysql Database
+```
+$ cd SimplePhone-Infra/mysql
+$ terraform init
+$ terraform plan -out .tfplan
+$ terraform apply
+
+```
 ## Setup EKS
 ```
 $ cd SimplePhone-Infra/eks
 $ terraform init
-$ terraform plan
+$ terraform plan -out .tfplan
 $ terraform apply
 ```
 
@@ -62,4 +74,5 @@ $ kubectl delete -f ../k8s/
 # Go to specific resource folder (eks, kms, mysql)
 $ terraform refresh
 $ terraform destroy
+$ aws s3 rm s3://terraform-simplephone --recursive
 ```

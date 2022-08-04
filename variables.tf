@@ -16,10 +16,23 @@ variable "default_tags" {
   default = {
     Provisioner = "terraform"
     Environment = "Production"
-    Project =  "SimplePhone"
+    Project     = "SimplePhone"
   }
   type        = map(string)
   description = "Default tag for all resources"
+}
+
+variable "cidr_block" {
+  description = "The IPv4 CIDR block for the VPC"
+  type        = string
+  default     = "10.0.0.0/16"
+}
+
+
+variable "rds_port" {
+  default     = 3306
+  type        = string
+  description = "The port on which the DB accepts connections."
 }
 
 ################################################################################
@@ -28,268 +41,17 @@ variable "default_tags" {
 
 variable "aws_kms_secrets_payload" {
   description = "Base64 encoded payload, as returned from a KMS encrypt operation"
-  type = string
-  default = "AQICAHgL1vXDmE6Ar5d9JHiVFVpYAM78ig3st9+QvM8p6TApEAEv5HLGGj4wash6SZdTll3LAAAAdjB0BgkqhkiG9w0BBwagZzBlAgEAMGAGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMdi1W61/fe1UErOHgAgEQgDPNUn9V53tvXAbZjr/QtfqBu/sKVThBcelBN8qATRx+irODHv5ztxypIPMI8nKJ/Rkb+CE="
-}
-
-################################################################################
-# DataBase
-################################################################################
-
-variable "db_instance" {
-  description = "DB instance type"
-  type = string
-  default = "db.t3.small"
-}
-
-variable "multi_az" {
-  description = "Enable/Disable Amazon RDS Multi-AZ deployment feature. Amazon RDS provides high availability and failover support for DB instances using Multi-AZ deployments. In a Multi-AZ deployment, Amazon RDS automatically provisions and maintains a synchronous standby replica in a different Availability Zone."
-  type = string
-  default = true
-}
-
-variable "allocated_storage" {
-  description = "The allocated storage in gibibytes"
-  type = number
-  default = 20
-}
-
-variable "max_allocated_storage" {
-  description = "To enable Storage Autoscaling with instances that support the feature, define the max_allocated_storage argument higher than the allocated_storage argument."
-  type = number
-  default = 50
-}
-
-variable "db_name" {
-  description = "The name of the database to create when the DB instance is created. Must contain 1 to 64 letters or numbers and Can't be a word reserved by the specified database engine"
-  type = string
-  default = "simplephone"
-}
-
-variable "iops" {
-  description = "The amount of provisioned IOPS. Setting this implies a storage_type of io1."
   type        = string
-  default     = 0
-}
-
-variable "maintenance_window" {
-  description = "The window to perform maintenance in."
-  type        = string
-  default     = "Mon:00:00-Mon:03:00"
-}
-
-variable "backup_window" {
-  description = "The daily time range (in UTC) during which automated backups are created if they are enabled."
-  type        = string
-  default     = "Sat:00:00-Sat:03:00"
-}
-
-variable "skip_final_snapshot" {
-  description = "Determines whether a final DB snapshot is created before the DB instance is deleted."
-  type        = string
-  default     = false
-}
-
-variable "storage_type" {
-  default     = "gp2"
-  type        = string
-  description = "One of standard (magnetic), gp2 (general purpose SSD), or io1 (provisioned IOPS SSD)."
-}
-
-variable "engine_version" {
-  type        = string
-  description = "The engine version to use."
-  default = "5.7"
-}
-
-variable "parameter_group_name" {
-  type        = string
-  description = "Name of the DB parameter group to associate."
-  default = "default.mysql5.7"
-}
-
-variable "backup_retention_period" {
-  default     = "10"
-  type        = string
-  description = "The days to retain backups for. Must be between 0 and 35."
-}
-
-variable "allow_major_version_upgrade" {
-  default     = true
-  type        = string
-  description = "Indicates that major version upgrades are allowed."
-}
-
-variable "auto_minor_version_upgrade" {
-  default     = true
-  type        = string
-  description = "Indicates that minor engine upgrades will be applied automatically to the DB instance during the maintenance window.."
-}
-
-variable "username" {
-  type        = string
-  description = "Username for the master DB user."
-  default = "admin"
-}
-
-variable "iam_database_authentication_enabled" {
-  default     = true
-  type        = string
-  description = "Specifies whether or mappings of IAM accounts to database accounts is enabled."
-}
-
-variable "port" {
-  default     = 3306
-  type        = string
-  description = "The port on which the DB accepts connections."
-}
-
-variable "deletion_protection" {
-  default     = true
-  type        = string
-  description = "If the DB instance should have deletion protection enabled."
+  default     = "AQICAHiNXF2B9cZ2EiPLamo+uFHkIhF5Iw0ZTVzyuYV3vzvEdgHcn+0E3RY7nLtzfNyxM2PzAAAAajBoBgkqhkiG9w0BBwagWzBZAgEAMFQGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM3i370pUMwoMuX3yvAgEQgCfxA7aGupYF//AnbiJRDs+XbGQu6IXDjoTJ0xI1JQR/IOAGH15IyAQ="
 }
 
 ################################################################################
 # Cluster
 ################################################################################
 
-variable "cluster_name" {
-  description = "Name of the EKS cluster"
-  type        = string
-  default     = "simplephone"
-}
 
-variable "cluster_version" {
-  description = "Kubernetes `<major>.<minor>` version to use for the EKS cluster (i.e.: `1.22`)"
-  type        = string
-  default     = "1.22"
-}
 
-variable "cluster_enabled_log_types" {
-  description = "A list of the desired control plane logs to enable. For more information, see Amazon EKS Control Plane Logging documentation (https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html)"
-  type        = list(string)
-  default     = ["audit", "api", "authenticator"]
-}
 
-variable "cluster_additional_security_group_ids" {
-  description = "List of additional, externally created security group IDs to attach to the cluster control plane"
-  type        = list(string)
-  default     = []
-}
-
-variable "control_plane_subnet_ids" {
-  description = "A list of subnet IDs where the EKS cluster control plane (ENIs) will be provisioned. Used for expanding the pool of subnets used by nodes/node groups without replacing the EKS control plane"
-  type        = list(string)
-  default     = []
-}
-
-variable "subnet_ids" {
-  description = "A list of subnet IDs where the nodes/node groups will be provisioned. If `control_plane_subnet_ids` is not provided, the EKS cluster control plane (ENIs) will be provisioned in these subnets"
-  type        = list(string)
-  default     = []
-}
-
-variable "cluster_endpoint_private_access" {
-  description = "Indicates whether or not the Amazon EKS private API server endpoint is enabled"
-  type        = bool
-  default     = false
-}
-
-variable "cluster_endpoint_public_access" {
-  description = "Indicates whether or not the Amazon EKS public API server endpoint is enabled"
-  type        = bool
-  default     = true
-}
-
-variable "cluster_endpoint_public_access_cidrs" {
-  description = "List of CIDR blocks which can access the Amazon EKS public API server endpoint"
-  type        = list(string)
-  default     = ["0.0.0.0/0"]
-}
-
-variable "cluster_ip_family" {
-  description = "The IP family used to assign Kubernetes pod and service addresses. Valid values are `ipv4` (default) and `ipv6`. You can only specify an IP family when you create a cluster, changing this value will force a new cluster to be created"
-  type        = string
-  default     = null
-}
-
-variable "cluster_service_ipv4_cidr" {
-  description = "The CIDR block to assign Kubernetes service IP addresses from. If you don't specify a block, Kubernetes assigns addresses from either the 10.100.0.0/16 or 172.20.0.0/16 CIDR blocks"
-  type        = string
-  default     = null
-}
-
-variable "cluster_encryption_config" {
-  description = "Configuration block with encryption configuration for the cluster"
-  type        = list(any)
-  default     = []
-}
-
-variable "attach_cluster_encryption_policy" {
-  description = "Indicates whether or not to attach an additional policy for the cluster IAM role to utilize the encryption key provided"
-  type        = bool
-  default     = true
-}
-
-variable "cluster_tags" {
-  description = "A map of additional tags to add to the cluster"
-  type        = map(string)
-  default     = {}
-}
-
-variable "create_cluster_primary_security_group_tags" {
-  description = "Indicates whether or not to tag the cluster's primary security group. This security group is created by the EKS service, not the module, and therefore tagging is handled after cluster creation"
-  type        = bool
-  default     = true
-}
-
-variable "cluster_timeouts" {
-  description = "Create, update, and delete timeout configurations for the cluster"
-  type        = map(string)
-  default     = {}
-}
-################################################################################
-# Kubernetes
-################################################################################
-variable "k8s_namespace" {
-  description = "Managed k8s namespaces"
-  type        = string
-  default     = "kube-system"
-}
-
-variable "helm_lb_controller_version" {
-  description = "AWS Load Balancer Controller version"
-  type        = string
-  default     = "1.4.1"
-}
-
-variable "helm_lb_controller_repo" {
-  description = "AWS Load Balancer Controller helm repo"
-  type        = string
-  default     = "https://aws.github.io/eks-charts"
-}
-################################################################################
-# Network
-################################################################################
-
-variable "vpc_cidr_block" {
-  description = "The IPv4 CIDR block for the VPC"
-  type        = string
-  default     = "10.0.0.0/16"
-}
-
-variable "subnet_cidr_block" {
-  description = "The IPv4 CIDR block for the subnet"
-  type        = list(string)
-  default     = ["10.0.0.0/19", "10.0.32.0/19", "10.0.64.0/19", "10.0.96.0/19"]
-}
-
-variable "availability_zone" {
-  description = "AZ for the subnet"
-  type        = list(string)
-  default     = ["us-east-1a", "us-east-1b", "us-east-1a", "us-east-1b"]
-}
 
 ################################################################################
 # KMS Key
@@ -299,6 +61,10 @@ variable "create_kms_key" {
   description = "Controls if a KMS key for cluster encryption should be created"
   type        = bool
   default     = false
+}
+
+variable "rds_password" {
+  type = string
 }
 
 variable "kms_key_description" {
@@ -392,6 +158,13 @@ variable "cloudwatch_log_group_kms_key_id" {
 ################################################################################
 # Cluster Security Group
 ################################################################################
+
+variable "cluster_name" {
+  description = "Name of the EKS cluster"
+  type        = string
+  default     = "simplephone"
+}
+
 variable "create_cluster_security_group" {
   description = "Determines if a security group is created for the cluster or use the existing `cluster_security_group_id`"
   type        = bool
