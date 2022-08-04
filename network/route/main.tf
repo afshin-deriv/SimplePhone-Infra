@@ -1,3 +1,8 @@
+# Internet Gatway
+resource "aws_internet_gateway" "igw" {
+  vpc_id = var.vpc_id
+}
+
 # NAT Gateway
 resource "aws_eip" "nat" {
   vpc = true
@@ -8,12 +13,12 @@ resource "aws_eip" "nat" {
 
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat.id
-  subnet_id     = var.nat_subnet_id
+  subnet_id     = var.public_subnet_id
 
   tags = {
     Name = "nat"
   }
-  depends_on = [var.internet_gateway]
+  depends_on = [aws_internet_gateway.igw]
 }
 
 # Route
@@ -35,7 +40,7 @@ resource "aws_route_table" "public" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = var.internet_gateway
+    gateway_id = aws_internet_gateway.igw.id
   }
 
   tags = {

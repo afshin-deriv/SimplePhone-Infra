@@ -1,14 +1,14 @@
 
-data "aws_kms_secrets" "rds-secret" {
-  secret {
-    name    = "master_password"
-    payload = var.password_payload
+# data "aws_kms_secrets" "rds-secret" {
+#   secret {
+#     name    = "master_password"
+#     payload = var.password_payload
 
-    context = {
-      usage = "Database"
-    }
-  }
-}
+#     context = {
+#       usage = "Database"
+#     }
+#   }
+# }
 
 resource "aws_db_instance" "my_test_mysql" {
   allocated_storage           = var.allocated_storage
@@ -20,8 +20,8 @@ resource "aws_db_instance" "my_test_mysql" {
   db_name                     = var.db_name
   username                    = var.username
   port                        = var.rds_port
-  password                    = data.aws_kms_secrets.rds-secret.plaintext["rds_password"]
-  kms_key_id                   = var.kms_key_id
+  #password                    = data.aws_kms_secrets.rds-secret.plaintext["rds_password"]
+  #kms_key_id                   = var.kms_key_id
   iam_database_authentication_enabled = var.iam_database_authentication_enabled
   parameter_group_name        = var.parameter_group_name
   db_subnet_group_name        = var.db_subnet_group_name

@@ -10,8 +10,3 @@ resource "aws_vpc" "main" {
     "Name" = "VPC"
   }
 }
-
-# Internet Gatway
-resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.main.id
-}

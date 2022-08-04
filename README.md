@@ -12,7 +12,7 @@ export TF_VAR_rds_password=111222333
 $ git clone git@github.com:afshinpaydar-binary/SimplePhone-Infra.git
 ```
 
-## Edit `aws_region` and `aws_profile` in the `variables.tf` file
+#### Edit `aws_region` and `aws_profile` in the `variables.tf` file
 
 # Setup S3 Bucket for terraform storage backend
 ```
