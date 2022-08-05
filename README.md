@@ -36,15 +36,58 @@ $ terraform plan -out .tfplan
 $ terraform apply
 ```
 
-## Setup K8S deployment
+## Setup CD (flux bootstrap)
+
+1. Bootstrap the Flux Config Repository:
+
+For Personal Accounts:
 ```
-$ kubectl apply -f ../k8s/deployment.yaml && kubectl apply -f ../k8s/
-$ kubectl get ing -n production
-Create a CNAME that ponits <Site DNS > to <LB DNS - output of previous command>
+flux bootstrap github \
+  --owner=$GITHUB_USER \
+  --repository=flux-deploy \
+  --branch=main \
+  --path=./clusters/cluster1 \
+  --personal
+```
+
+For Organizational Accounts:
+```
+flux bootstrap github \
+  --owner=$GITHUB_USER \
+  --repository=flux-deploy \
+  --branch=main \
+  --path=./clusters/cluster1
+```
+
+2. Create a Source to Point Flux to the Desired State
+```
+flux create source git simplephone \
+  --url=https://github.com/afshinpaydar-binary/SimplePhone-Infra.git \
+  --branch=main \
+  --interval=30s \
+  --export > ./clusters/cluster1/deployment.yaml
+```
+
+3.  Create a Kustomization to Deploy the Desired State Found in the Source
+```
+flux create kustomization simplephone \
+  --source=simplephone \
+  --path=./flux \
+  --prune=true \
+  --validation=client \
+  --interval=1m \
+  --export > ./clusters/cluster1/deployment-kustomization.yaml
+```
+
+4.  Watch the Kustomization
+```
+watch flux get kustomizations
 ```
 
 ## Get access and check the status
 ```
+$ kubectl get ing -n production
+Create a CNAME that ponits <Site DNS > to <LB DNS - output of previous command>
 $ kubectl get svc -n production
 $ helm list -n kube-system
 $ kubectl logs -f -n kube-system \
