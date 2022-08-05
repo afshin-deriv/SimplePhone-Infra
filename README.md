@@ -10,6 +10,7 @@ Terraform for build EKS fargate infrastructure
 | helm      | ~> 3.0.0   |
 | flux      | ~> 0.31.5  |
 
+Export credentials as environment values:
 ```
 export KUBE_CONFIG_PATH=~/.kube/config
 export AWS_ACCESS_KEY_ID="xxxxxxx"
@@ -37,18 +38,20 @@ $ terraform apply ".tfplan"
 ```
 
 ## Setup DB Secret
-Replace <secure-db-password> with <TF_VAR_DB_PASSWORD> value, used to connect to RDS.
-Also update <db_endpoint> value in `./k8s/secret.yaml` file with output of previous command.
+Replace <SECURE-DB-PASSWORD> with value of <TF_VAR_DB_PASSWORD> environment variable.
+Also replace <DB_ENDPOINT> value with output of previous command <rds_end_point>.
 
 Linux:
 ```
-echo -n "secure-db-password" | base64 | xargs -I {}  sed -i 's/db_password/{}/g' k8s/secret.yaml
+echo -n "SECURE-DB-PASSWORD" | base64 | xargs -I {}  sed -i 's/db_password/{}/g' k8s/secret.yaml
+echo -n "DB_ENDPOINT" | base64 | xargs -I {}  sed -i 's/db-endpoint/{}/g' k8s/secret.yaml
 kubectl apply -f ./k8s/secret.yaml
 ```
 
-Mac:
+Mac OS:
 ```
-echo -n "secure-db-password" | base64 | xargs -I {}  gsed -i 's/db_password/{}/g' k8s/secret.yaml
+echo -n "SECURE-DB-PASSWORD" | base64 | xargs -I {}  gsed -i 's/db_password/{}/g' k8s/secret.yaml
+echo -n "DB_ENDPOINT" | base64 | xargs -I {}  gsed -i 's/db-endpoint/{}/g' k8s/secret.yaml
 kubectl apply -f ./k8s/secret.yaml
 ```
 
