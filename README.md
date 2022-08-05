@@ -38,6 +38,7 @@ $ terraform apply ".tfplan"
 
 ## Setup DB Secret
 Replace <secure-db-password> with <TF_VAR_DB_PASSWORD> value, used to connect to RDS.
+Also update <db_endpoint> value in `./k8s/secret.yaml` file with output of previous command (without port).
 
 Linux:
 ```
