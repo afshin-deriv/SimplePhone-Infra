@@ -1,14 +1,7 @@
-
-# data "aws_kms_secrets" "rds-secret" {
-#   secret {
-#     name    = "master_password"
-#     payload = var.password_payload
-
-#     context = {
-#       usage = "Database"
-#     }
-#   }
-# }
+resource "aws_db_subnet_group" "db_subnet_group" {
+  name       = "main"
+  subnet_ids = var.subnet_ids
+}
 
 resource "aws_db_instance" "my_test_mysql" {
   allocated_storage           = var.allocated_storage
@@ -20,11 +13,10 @@ resource "aws_db_instance" "my_test_mysql" {
   db_name                     = var.db_name
   username                    = var.username
   port                        = var.rds_port
-  #password                    = data.aws_kms_secrets.rds-secret.plaintext["rds_password"]
-  #kms_key_id                   = var.kms_key_id
+  password                    = var.rds_password
   iam_database_authentication_enabled = var.iam_database_authentication_enabled
   parameter_group_name        = var.parameter_group_name
-  db_subnet_group_name        = var.db_subnet_group_name
+  db_subnet_group_name        = aws_db_subnet_group.db_subnet_group.id
   vpc_security_group_ids      = [var.rds-sg_id]
   allow_major_version_upgrade = var.allow_major_version_upgrade
   auto_minor_version_upgrade  = var.auto_minor_version_upgrade

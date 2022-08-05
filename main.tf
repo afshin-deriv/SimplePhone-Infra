@@ -1,4 +1,3 @@
-## Network
 # Create VPC
 module "vpc" {
   source     = "./network/vpc"
@@ -20,6 +19,7 @@ module "route" {
   vpc_id           = module.vpc.vpc_id
 }
 
+# RDS Security Group
 module "sec_group_rds" {
   source         = "./network/sec_group"
   vpc_id         = module.vpc.vpc_id
@@ -27,21 +27,16 @@ module "sec_group_rds" {
   rds_port       = var.rds_port
 }
 
-# module "kms" {
-#   source              = "./kms"
-#   eks_fargate_profile = module.eks_cluster.kube-system
-#   aws_region   = var.aws_region
-#   rds_password = var.rds_password
-# }
+# Create Mysql RDS
+module "rds" {
+  source               = "./rds"
+  rds_password         = var.rds_password
+  subnet_ids           = module.subnets.private_subnet_ids
+  db_subnet_group_name = module.subnets.db_subnet_group_name
+  rds-sg_id            = module.sec_group_rds.rds-sg_id
+}
 
-# module "rds" {
-#   source               = "./rds"
-#   password_payload     = module.kms.ciphertext_blob
-#   kms_key_id           = module.kms.key_id
-#   db_subnet_group_name = module.subnets.db_subnet_group_name
-#   rds-sg_id            = module.sec_group_rds.rds-sg_id
-# }
-
+# Create EKS Cluster (Fargate)
 module "eks_cluster" {
   source       = "./eks"
   cluster_name = var.cluster_name

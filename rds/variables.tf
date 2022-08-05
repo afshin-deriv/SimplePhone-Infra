@@ -43,13 +43,14 @@ variable "maintenance_window" {
 variable "backup_window" {
   description = "The daily time range (in UTC) during which automated backups are created if they are enabled."
   type        = string
-  default     = "00:00-01:30"
+  default     = "04:00-00:00"
 }
 
 variable "skip_final_snapshot" {
   description = "Determines whether a final DB snapshot is created before the DB instance is deleted."
   type        = string
-  default     = false
+  # Must enable on production
+  default     = true
 }
 
 variable "storage_type" {
@@ -107,16 +108,13 @@ variable "rds_port" {
 }
 
 variable "deletion_protection" {
-  default     = true
+  # Should be enable on production
+  default     = false
   type        = string
   description = "If the DB instance should have deletion protection enabled."
 }
 
-variable "password_payload" {
-  type = string
-}
-
-variable "kms_key_id" {
+variable "rds_password" {
   type = string
 }
 
@@ -126,4 +124,7 @@ variable "rds-sg_id" {
 
 variable "db_subnet_group_name" {
   type = string
+}
+variable "subnet_ids" {
+  type = list(string)
 }

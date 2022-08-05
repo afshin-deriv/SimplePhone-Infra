@@ -1,20 +1,26 @@
 # SimplePhone-Infra
 Terraform for build EKS fargate infrastructure
 
-## Deploy
-Install `awscli ~> 2.7.1`
+## Set Environment variables and requirements
+
+| Tool      | Version |
+| --------- | ----------:|
+| awscli    | ~> 2.7.1   |
+| terraform | ~> v1.0.0  |
+| helm      | ~> 3.0.0   |
+| flux      | ~> 0.31.5  |
+
 ```
-$ export KUBE_CONFIG_PATH=~/.kube/config
-$ export AWS_ACCESS_KEY_ID="xxxxxxx"
-$ export AWS_SECRET_ACCESS_KEY="yyyyyyy"
-$ export DB_PASSWORD="zzzzzzz"
+export KUBE_CONFIG_PATH=~/.kube/config
+export AWS_ACCESS_KEY_ID="xxxxxxx"
+export AWS_SECRET_ACCESS_KEY="yyyyyyy"
 export TF_VAR_rds_password=111222333
-$ git clone git@github.com:afshinpaydar-binary/SimplePhone-Infra.git
+git clone git@github.com:afshinpaydar-binary/SimplePhone-Infra.git
 ```
 
 #### Edit `aws_region` and `aws_profile` in the `variables.tf` file
 
-# Setup S3 Bucket for terraform storage backend
+## Setup S3 Bucket for terraform storage backend
 ```
 $ cd SimplePhone-Infra/s3_terraform_state
 $ terraform init
@@ -22,31 +28,9 @@ $ terraform plan -out .tfplan
 $ terraform apply
 ```
 
-# Setup KMS
+## Setup Infra
 ```
-$ cd SimplePhone-Infra/kms
-$ terraform init -reconfigure
-$ terraform plan -out .tfplan
-$ terraform apply
-
-$ echo -n '<Secure-Password-for-DB>' > /tmp/plaintext-password
-# Replace <Key-ID> with previous `terraform apply` output `key_id` value
-$ aws kms encrypt --region <AWS-Region> --key-id <Key-ID> --plaintext fileb:///tmp/plaintext-password --encryption-context usage=Database --output text --query CiphertextBlob
-$ rm -rf /tmp/plaintext-password
-# Update `aws_kms_secrets_payload` variablein the `variables.tf` file with output of last command
-```
-
-## Setup Mysql Database
-```
-$ cd SimplePhone-Infra/mysql
-$ terraform init
-$ terraform plan -out .tfplan
-$ terraform apply
-
-```
-## Setup EKS
-```
-$ cd SimplePhone-Infra/eks
+$ cd SimplePhone-Infra
 $ terraform init
 $ terraform plan -out .tfplan
 $ terraform apply
@@ -56,7 +40,7 @@ $ terraform apply
 ```
 $ kubectl apply -f ../k8s/deployment.yaml && kubectl apply -f ../k8s/
 $ kubectl get ing -n production
-Create a CNAME that ponits <Site DNS> to <LB DNS>
+Create a CNAME that ponits <Site DNS > to <LB DNS - output of previous command>
 ```
 
 ## Get access and check the status
