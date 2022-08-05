@@ -14,7 +14,7 @@ Terraform for build EKS fargate infrastructure
 export KUBE_CONFIG_PATH=~/.kube/config
 export AWS_ACCESS_KEY_ID="xxxxxxx"
 export AWS_SECRET_ACCESS_KEY="yyyyyyy"
-export TF_VAR_rds_password=111222333
+export TF_VAR_DB_PASSWORD=111222333
 git clone git@github.com:afshinpaydar-binary/SimplePhone-Infra.git
 ```
 
@@ -31,10 +31,26 @@ $ terraform apply
 ## Setup Infra
 ```
 $ cd SimplePhone-Infra/terraform/
-$ terraform init
+$ terraform init -reconfigure
 $ terraform plan -out .tfplan
-$ terraform apply
+$ terraform apply ".tfplan"
 ```
+
+## Setup DB Secret
+Replace <secure-db-password> with <TF_VAR_DB_PASSWORD> value, used to connect to RDS.
+
+Linux:
+```
+echo -n "secure-db-password" | base64 | xargs -I {}  sed -i 's/db_password/{}/g' k8s/secret.yaml
+kubectl apply -f ./k8s/secret.yaml
+```
+
+Mac:
+```
+echo -n "secure-db-password" | base64 | xargs -I {}  gsed -i 's/db_password/{}/g' k8s/secret.yaml
+kubectl apply -f ./k8s/secret.yaml
+```
+
 
 ## Setup CD (flux bootstrap)
 

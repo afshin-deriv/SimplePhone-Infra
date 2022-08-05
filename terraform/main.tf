@@ -30,7 +30,7 @@ module "sec_group_rds" {
 # Create Mysql RDS
 module "rds" {
   source               = "./modules/rds"
-  rds_password         = var.rds_password
+  DB_PASSWORD          = var.DB_PASSWORD
   subnet_ids           = module.subnets.private_subnet_ids
   db_subnet_group_name = module.subnets.db_subnet_group_name
   rds-sg_id            = module.sec_group_rds.rds-sg_id

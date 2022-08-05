@@ -114,7 +114,7 @@ variable "deletion_protection" {
   description = "If the DB instance should have deletion protection enabled."
 }
 
-variable "rds_password" {
+variable "DB_PASSWORD" {
   type = string
 }
 

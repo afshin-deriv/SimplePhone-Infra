@@ -13,7 +13,7 @@ resource "aws_db_instance" "my_test_mysql" {
   db_name                     = var.db_name
   username                    = var.username
   port                        = var.rds_port
-  password                    = var.rds_password
+  password                    = var.DB_PASSWORD
   iam_database_authentication_enabled = var.iam_database_authentication_enabled
   parameter_group_name        = var.parameter_group_name
   db_subnet_group_name        = aws_db_subnet_group.db_subnet_group.id

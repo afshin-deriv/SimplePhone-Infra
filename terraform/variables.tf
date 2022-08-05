@@ -28,11 +28,14 @@ variable "cidr_block" {
   default     = "10.0.0.0/16"
 }
 
-
 variable "rds_port" {
   default     = 3306
   type        = string
   description = "The port on which the DB accepts connections."
+}
+
+variable "DB_PASSWORD" {
+  type = string
 }
 
 ################################################################################
