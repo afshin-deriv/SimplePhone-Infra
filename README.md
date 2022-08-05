@@ -22,7 +22,7 @@ git clone git@github.com:afshinpaydar-binary/SimplePhone-Infra.git
 
 ## Setup S3 Bucket for terraform storage backend
 ```
-$ cd SimplePhone-Infra/s3_terraform_state
+$ cd SimplePhone-Infra/terraform/s3_terraform_state/
 $ terraform init
 $ terraform plan -out .tfplan
 $ terraform apply
@@ -30,7 +30,7 @@ $ terraform apply
 
 ## Setup Infra
 ```
-$ cd SimplePhone-Infra
+$ cd SimplePhone-Infra/terraform/
 $ terraform init
 $ terraform plan -out .tfplan
 $ terraform apply
