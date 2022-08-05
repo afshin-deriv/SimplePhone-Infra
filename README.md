@@ -38,7 +38,7 @@ $ terraform apply ".tfplan"
 
 ## Setup DB Secret
 Replace <secure-db-password> with <TF_VAR_DB_PASSWORD> value, used to connect to RDS.
-Also update <db_endpoint> value in `./k8s/secret.yaml` file with output of previous command (without port).
+Also update <db_endpoint> value in `./k8s/secret.yaml` file with output of previous command.
 
 Linux:
 ```
@@ -51,7 +51,6 @@ Mac:
 echo -n "secure-db-password" | base64 | xargs -I {}  gsed -i 's/db_password/{}/g' k8s/secret.yaml
 kubectl apply -f ./k8s/secret.yaml
 ```
-
 
 ## Setup CD (flux bootstrap)
 
