@@ -101,7 +101,7 @@ resource "aws_eks_fargate_profile" "kube-system" {
   fargate_profile_name   = "kube-system"
   pod_execution_role_arn = aws_iam_role.eks-fargate-profile.arn
 
-  # These subnets must have the following resource tag: 
+  # These subnets must have the following resource tag:
   # kubernetes.io/cluster/<CLUSTER_NAME>.
   subnet_ids = [
     var.subnet_ids[0],
@@ -168,6 +168,24 @@ resource "aws_eks_fargate_profile" "production" {
 
   selector {
     namespace = "production"
+  }
+}
+
+# Used for flux CD
+resource "aws_eks_fargate_profile" "flux-system" {
+  cluster_name           = aws_eks_cluster.cluster.name
+  fargate_profile_name   = "flux-system"
+  pod_execution_role_arn = aws_iam_role.eks-fargate-profile.arn
+
+  # These subnets must have the following resource tag: 
+  # kubernetes.io/cluster/<CLUSTER_NAME>.
+  subnet_ids = [
+    var.subnet_ids[0],
+    var.subnet_ids[1]
+  ]
+
+  selector {
+    namespace = "flux-system"
   }
 }
 
