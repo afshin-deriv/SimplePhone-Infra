@@ -60,6 +60,11 @@ echo -n "DB_ENDPOINT" | base64 | xargs -I {}  gsed -i 's/db-endpoint/{}/g' ./k8s
 echo -n "API_SECRET_KEY" | base64 | xargs -I {}  gsed -i 's/api-secret-key/{}/g' ./k8s/secret.yaml
 kubectl apply -f ./k8s/secret.yaml
 ```
+## Create Ingres 
+```sh
+cd SimplePhone-Infra
+kubectl apply -f ./k8s/ingress.yaml
+```
 
 ## Configure Https and Certificate
 Create a managed Certificate by AWS Certificate Manager and update value of `alb.ingress.kubernetes.io/certificate-arn` annotation in the `./flux/ingress.yaml` file.
