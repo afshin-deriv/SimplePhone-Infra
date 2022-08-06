@@ -142,12 +142,6 @@ variable "create_cni_ipv6_iam_policy" {
 # IRSA
 ################################################################################
 
-variable "enable_irsa" {
-  description = "Determines whether to create an OpenID Connect Provider for EKS to enable IRSA"
-  type        = bool
-  default     = true
-}
-
 variable "openid_connect_audiences" {
   description = "List of OpenID Connect audience client IDs to add to the IRSA provider"
   type        = list(string)
@@ -159,7 +153,6 @@ variable "custom_oidc_thumbprints" {
   type        = list(string)
   default     = []
 }
-
 ################################################################################
 # Cluster IAM Role
 ################################################################################
