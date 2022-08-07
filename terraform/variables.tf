@@ -34,20 +34,6 @@ variable "rds_port" {
   description = "The port on which the DB accepts connections."
 }
 
-variable "DB_PASSWORD" {
-  type = string
-}
-
-################################################################################
-# Key Management Service
-################################################################################
-
-variable "aws_kms_secrets_payload" {
-  description = "Base64 encoded payload, as returned from a KMS encrypt operation"
-  type        = string
-  default     = "AQICAHiNXF2B9cZ2EiPLamo+uFHkIhF5Iw0ZTVzyuYV3vzvEdgHcn+0E3RY7nLtzfNyxM2PzAAAAajBoBgkqhkiG9w0BBwagWzBZAgEAMFQGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM3i370pUMwoMuX3yvAgEQgCfxA7aGupYF//AnbiJRDs+XbGQu6IXDjoTJ0xI1JQR/IOAGH15IyAQ="
-}
-
 ################################################################################
 # CloudWatch Log Group
 ################################################################################

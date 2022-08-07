@@ -121,3 +121,17 @@ variable "helm_lb_controller_repo" {
   type        = string
   default     = "https://aws.github.io/eks-charts"
 }
+
+variable "rds_end_point" {
+  description = "RDS endpoint"
+  type = string
+}
+
+variable "DB_PASSWORD" {
+  description = "RDS Password"
+  type = string
+}
+
+variable "API_SECRET_KEY" {
+  type = string
+}

@@ -38,11 +38,12 @@ module "rds" {
 
 # Create EKS Cluster (Fargate)
 module "eks_cluster" {
-  source       = "./modules/eks"
-  cluster_name = var.cluster_name
-  subnet_ids   = module.subnets.subnets
-  aws_region   = var.aws_region
-  vpc_id       = module.vpc.vpc_id
+  source         = "./modules/eks"
+  cluster_name   = var.cluster_name
+  subnet_ids     = module.subnets.subnets
+  aws_region     = var.aws_region
+  vpc_id         = module.vpc.vpc_id
+  rds_end_point  = module.rds.rds_end_point
 }
 
 
