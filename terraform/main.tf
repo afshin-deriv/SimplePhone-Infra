@@ -44,6 +44,8 @@ module "eks_cluster" {
   aws_region     = var.aws_region
   vpc_id         = module.vpc.vpc_id
   rds_end_point  = module.rds.rds_end_point
+  DB_PASSWORD    = var.DB_PASSWORD
+  API_SECRET_KEY = var.API_SECRET_KEY
 }
 
 

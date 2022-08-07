@@ -34,6 +34,14 @@ variable "rds_port" {
   description = "The port on which the DB accepts connections."
 }
 
+variable "DB_PASSWORD" {
+  description = "RDS Password"
+  type        = string
+}
+
+variable "API_SECRET_KEY" {
+  type = string
+}
 ################################################################################
 # CloudWatch Log Group
 ################################################################################
