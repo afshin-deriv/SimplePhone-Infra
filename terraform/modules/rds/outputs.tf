@@ -1,5 +1,5 @@
 output "rds_end_point" {
-  value = aws_db_instance.my_test_mysql.endpoint
+  value = split(":", aws_db_instance.my_test_mysql.endpoint)[0]
 }
 
 output "aws_db_instance" {

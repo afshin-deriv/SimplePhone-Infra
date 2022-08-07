@@ -275,7 +275,7 @@ resource "null_resource" "k8s-secret" {
   depends_on = [aws_eks_fargate_profile.production, aws_eks_fargate_profile.kube-system]
   provisioner "local-exec" {
     command = <<EOF
-echo -n $API_SECRET_KEY | base64 | xargs -I {} sed -i.back1 's/api-secret-key/{}/g' ../k8s/secret.yaml && echo -n $DB_PASSWORD | base64 | xargs -I {} sed -i.back2 's/db_password/{}/g' ../k8s/secret.yaml && echo -n $RDS_END_POINT | base64 | xargs -I {} sed -i.back3 's/db-endpoint/{}/g' ../k8s/secret.yaml && sleep 5 && kubectl apply -f ../k8s/secret.yaml && mv ../k8s/secret.yaml.back1 ../k8s/secret.yaml && rm -f ../k8s/secret.yaml.back*
+echo -n "$API_SECRET_KEY" | base64 | xargs -I {} sed -i.back1 's/api-secret-key/{}/g' ../k8s/secret.yaml && echo -n "$DB_PASSWORD" | base64 | xargs -I {} sed -i.back2 's/db_password/{}/g' ../k8s/secret.yaml && echo -n "$RDS_END_POINT" | base64 | xargs -I {} sed -i.back3 's/db-endpoint/{}/g' ../k8s/secret.yaml && sleep 5 && kubectl apply -f ../k8s/secret.yaml && mv ../k8s/secret.yaml.back1 ../k8s/secret.yaml && rm -f ../k8s/secret.yaml.back*
 EOF
   environment = {
     API_SECRET_KEY = var.API_SECRET_KEY
