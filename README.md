@@ -16,7 +16,7 @@ export KUBE_CONFIG_PATH=~/.kube/config
 export AWS_ACCESS_KEY_ID="xxxxxxx"
 export AWS_SECRET_ACCESS_KEY="yyyyyyy"
 export TF_VAR_DB_PASSWORD=<Secure Password for DB>
-
+export TF_VAR_API_SECRET_KEY=<App Secret to encrypt cookies and save them to the browser>
 ```
 
 #### Edit `aws_region` and `aws_profile` in the `variables.tf` file
@@ -38,28 +38,6 @@ terraform plan -out .tfplan
 terraform apply ".tfplan"
 ```
 
-## Setup DB Secret
-Replace <SECURE-DB-PASSWORD> with value of <TF_VAR_DB_PASSWORD> environment variable, and replace <DB_ENDPOINT> with output of previous command <rds_end_point>.
-Also replace <API_SECRET_KEY> with a secure password.
-
-Linux:
-```
-cd SimplePhone-Infra
-echo -n "SECURE-DB-PASSWORD" | base64 | xargs -I {}  sed -i 's/db_password/{}/g' k8s/secret.yaml
-echo -n "DB_ENDPOINT" | base64 | xargs -I {}  sed -i 's/db-endpoint/{}/g' k8s/secret.yaml
-kubectl apply -f ./k8s/secret.yaml
-echo -n "API_SECRET_KEY" | base64 | xargs -I {}  sed -i 's/api-secret-key/{}/g' k8s/secret.yaml
-kubectl apply -f ./k8s/secret.yaml
-```
-
-Mac OS:
-```
-cd SimplePhone-Infra
-echo -n "SECURE-DB-PASSWORD" | base64 | xargs -I {}  gsed -i 's/db_password/{}/g' ./k8s/secret.yaml
-echo -n "DB_ENDPOINT" | base64 | xargs -I {}  gsed -i 's/db-endpoint/{}/g' ./k8s/secret.yaml
-echo -n "API_SECRET_KEY" | base64 | xargs -I {}  gsed -i 's/api-secret-key/{}/g' ./k8s/secret.yaml
-kubectl apply -f ./k8s/secret.yaml
-```
 ## Create Ingres 
 ```sh
 cd SimplePhone-Infra
