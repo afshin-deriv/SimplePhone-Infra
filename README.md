@@ -44,7 +44,7 @@ cd SimplePhone-Infra
 kubectl apply -f ./k8s/ingress.yaml
 ```
 
-## Configure Https and Certificate
+## Configure HTTPS and Certificate
 Create a managed Certificate by AWS Certificate Manager and update value of `alb.ingress.kubernetes.io/certificate-arn` annotation in the `./flux/ingress.yaml` file.
 
 ## Get access and check the status
@@ -60,8 +60,7 @@ $ curl $(kubectl get ing -n production -o jsonpath='{.items[0].status.loadBalanc
 
 ## Tearing down
 ```
-$ kubectl delete -f ../flux/
-# Go to specific resource folder (eks, kms, mysql)
+$ kubectl delete -n production
 $ terraform refresh
 $ terraform destroy
 $ aws s3 rm s3://terraform-simplephone --recursive

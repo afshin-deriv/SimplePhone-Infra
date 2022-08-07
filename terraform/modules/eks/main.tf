@@ -147,10 +147,13 @@ EOH
 }
 
 resource "null_resource" "kubectl" {
-       depends_on = [aws_eks_fargate_profile.kube-system]
-       provisioner "local-exec" {
-          command = "aws eks update-kubeconfig --name ${var.cluster_name} --region ${var.aws_region}"
-          }
+  depends_on = [aws_eks_fargate_profile.kube-system]
+  provisioner "local-exec" {
+    command = "aws eks update-kubeconfig --name ${var.cluster_name} --region ${var.aws_region}"
+  }
+  lifecycle {
+    ignore_changes = [triggers]
+  }
 }
 
 
@@ -269,15 +272,18 @@ resource "helm_release" "metrics-server" {
 
 # Create DB Secret inside K8S Secret
 resource "null_resource" "k8s-secret" {
-       depends_on = [aws_eks_fargate_profile.production]
-        provisioner "local-exec" {
-          command = join(
-            " ", [
-            "echo -n ${var.API_SECRET_KEY} | base64 | xargs -I {} sed -i.back 's/api-secret-key/{}/g' ../k8s/secret.yaml",
-            "echo -n ${var.DB_PASSWORD} | base64 | xargs -I {} sed -i.back 's/db_password/{}/g' ../k8s/secret.yaml",
-            "echo -n ${var.rds_end_point} | base64 | xargs -I {} sed -i.back 's/db-endpoint/{}/g' ../k8s/secret.yaml",
-            "kubectl apply -f ../k8s/secret.yaml",
-            "mv ../k8s/secret.yaml.back ../k8s/secret.yaml"
-          ])
-        }
+  depends_on = [aws_eks_fargate_profile.production, aws_eks_fargate_profile.kube-system]
+  provisioner "local-exec" {
+    command = <<EOF
+echo -n $API_SECRET_KEY | base64 | xargs -I {} sed -i.back1 's/api-secret-key/{}/g' ../k8s/secret.yaml && echo -n $DB_PASSWORD | base64 | xargs -I {} sed -i.back2 's/db_password/{}/g' ../k8s/secret.yaml && echo -n $RDS_END_POINT | base64 | xargs -I {} sed -i.back3 's/db-endpoint/{}/g' ../k8s/secret.yaml && sleep 5 && kubectl apply -f ../k8s/secret.yaml && mv ../k8s/secret.yaml.back1 ../k8s/secret.yaml && rm -f ../k8s/secret.yaml.back*
+EOF
+  environment = {
+    API_SECRET_KEY = var.API_SECRET_KEY
+    DB_PASSWORD = var.DB_PASSWORD
+    RDS_END_POINT = var.rds_end_point
+  }
+  }
+  lifecycle {
+    ignore_changes = [triggers]
+  }
 }
