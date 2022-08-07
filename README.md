@@ -38,12 +38,6 @@ terraform plan -out .tfplan
 terraform apply ".tfplan"
 ```
 
-## Create Ingres 
-```sh
-cd SimplePhone-Infra
-kubectl apply -f ./k8s/ingress.yaml
-```
-
 ## Configure HTTPS and Certificate
 Create a managed Certificate by AWS Certificate Manager and update value of `alb.ingress.kubernetes.io/certificate-arn` annotation in the `./flux/ingress.yaml` file.
 

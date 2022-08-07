@@ -287,3 +287,12 @@ EOF
     ignore_changes = [triggers]
   }
 }
+
+
+# Create Ingress
+resource "null_resource" "k8s-ingress" {
+  depends_on = [aws_eks_fargate_profile.production, aws_eks_fargate_profile.kube-system]
+  provisioner "local-exec" {
+    command = "kubectl apply -f ../k8s/ingress.yaml"
+  }
+}
