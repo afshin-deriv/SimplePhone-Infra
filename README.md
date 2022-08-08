@@ -9,6 +9,7 @@ Terraform for build EKS fargate infrastructure
 | terraform | ~> v1.0.0  |
 | helm      | ~> 3.0.0   |
 | flux      | ~> 0.31.5  |
+| mysql-client |         |
 
 Export credentials as environment values:
 ```

@@ -25,7 +25,7 @@ variable "max_allocated_storage" {
 variable "db_name" {
   description = "The name of the database to create when the DB instance is created. Must contain 1 to 64 letters or numbers and Can't be a word reserved by the specified database engine"
   type        = string
-  default     = "simplephone"
+  default     = "flask_app"
 }
 
 variable "iops" {

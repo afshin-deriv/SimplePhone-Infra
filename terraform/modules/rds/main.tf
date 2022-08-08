@@ -3,7 +3,7 @@ resource "aws_db_subnet_group" "db_subnet_group" {
   subnet_ids = var.subnet_ids
 }
 
-resource "aws_db_instance" "my_test_mysql" {
+resource "aws_db_instance" "mysql_db" {
   allocated_storage           = var.allocated_storage
   storage_type                = var.storage_type
   engine                      = "mysql"
@@ -28,3 +28,18 @@ resource "aws_db_instance" "my_test_mysql" {
   deletion_protection         = var.deletion_protection
 }
 
+
+resource "null_resource" "db_setup" {
+
+  depends_on = [aws_db_instance.mysql_db]
+
+    provisioner "local-exec" {
+        command = "mysql -h $DB_HOST -u $USERNAME -p $DB_PASSWORD $DB_NAME < ./files/init_db.sql"
+        environment {
+          DB_PASSWORD = var.DB_PASSWORD
+          DB_NAME     = var.db_name
+          DB_HOST     = split(":", aws_db_instance.my_test_mysql.endpoint)[0]
+          USERNAME    = var.username
+        }
+    }
+}
