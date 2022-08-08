@@ -27,19 +27,3 @@ resource "aws_db_instance" "mysql_db" {
   skip_final_snapshot         = var.skip_final_snapshot
   deletion_protection         = var.deletion_protection
 }
-
-
-resource "null_resource" "db_setup" {
-
-  depends_on = [aws_db_instance.mysql_db]
-
-    provisioner "local-exec" {
-        command = "mysql -h $DB_HOST -u $USERNAME -p $DB_PASSWORD $DB_NAME < ./files/init_db.sql"
-        environment {
-          DB_PASSWORD = var.DB_PASSWORD
-          DB_NAME     = var.db_name
-          DB_HOST     = split(":", aws_db_instance.my_test_mysql.endpoint)[0]
-          USERNAME    = var.username
-        }
-    }
-}
