@@ -19,33 +19,13 @@ spec:
       http:
         paths:
           - path: /
-            pathType: Exact
+            pathType: Prefix
             backend:
               service:
                 name: simplephone
                 port:
                   number: 80
-          - path: /static.*
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: simplephone
-                port:
-                  number: 80
-          - path: /add.*
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: simplephone
-                port:
-                  number: 80
-          - path: /delete.*
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: simplephone
-                port:
-                  number: 80
+
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -65,28 +45,7 @@ spec:
       http:
         paths:
           - path: /
-            pathType: Exact
-            backend:
-              service:
-                name: simplephone
-                port:
-                  number: 80
-          - path: /static.*
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: simplephone
-                port:
-                  number: 80
-          - path: /add.*
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: simplephone
-                port:
-                  number: 80
-          - path: /delete.*
-            pathType: ImplementationSpecific
+            pathType: Prefix
             backend:
               service:
                 name: simplephone
