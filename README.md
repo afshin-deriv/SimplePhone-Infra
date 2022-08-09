@@ -39,7 +39,7 @@ terraform apply ".tfplan"
 ```
 
 ## Configure HTTPS and Certificate
-Create a managed Certificate by AWS Certificate Manager and update value of `alb.ingress.kubernetes.io/certificate-arn` annotation in the `./flux/ingress.yaml` file.
+Create a managed Certificate by AWS Certificate Manager and update value of `alb.ingress.kubernetes.io/certificate-arn` annotation in the `./k8s/ingress.yaml` file.
 
 ## Get access and check the status
 ```
