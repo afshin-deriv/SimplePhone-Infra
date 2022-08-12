@@ -58,4 +58,6 @@ kubectl delete namespace production
 terraform refresh
 terraform destroy
 aws s3 rm s3://terraform-simplephone --recursive
+cd s3_terraform_state
+terraform destroy
 ```
