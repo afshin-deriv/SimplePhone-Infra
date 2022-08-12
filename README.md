@@ -1,5 +1,5 @@
 # SimplePhone-Infra
-Terraform for build EKS fargate infrastructure
+Terraform for building EKS fargate infrastructure
 
 ## Set Environment variables and requirements
 
@@ -41,21 +41,21 @@ terraform apply ".tfplan"
 ## Configure HTTPS and Certificate
 Create a managed Certificate by AWS Certificate Manager and update value of `alb.ingress.kubernetes.io/certificate-arn` annotation in the `./k8s/ingress.yaml` file and also update `host` there same as your site URL.
 
-## Get access and check the status
-```
-$ kubectl get ing -n production
-Create a CNAME that ponits <Site DNS > to <LB DNS - output of previous command>
-$ kubectl get svc -n production
-$ helm list -n kube-system
-$ kubectl logs -f -n kube-system \
+## Check the status and get access to app
+```sh
+kubectl get ing -n production
+# Create a CNAME that ponits <Site DNS > to <LB DNS - output of previous command>
+helm list -n kube-system
+kubectl logs -f -n kube-system \
   -l app.kubernetes.io/name=aws-loadbalancer-controller
-$ curl $(kubectl get ing -n production -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')
+curl $(kubectl get ing -n production -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')
 ```
 
-## Tearing down
-```
-$ kubectl delete -n production
-$ terraform refresh
-$ terraform destroy
-$ aws s3 rm s3://terraform-simplephone --recursive
+## Clean up
+```sh
+cd
+kubectl delete namespace production
+terraform refresh
+terraform destroy
+aws s3 rm s3://terraform-simplephone --recursive
 ```
